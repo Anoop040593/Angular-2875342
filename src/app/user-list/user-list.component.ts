@@ -3,13 +3,15 @@ import { User } from '../user/user';
 import { UserListService } from './user-list.service';
 import { WebStorageService } from '../services/web-storage.service';
 
+import { WebStorageService } from '../services/web-storage.service';
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent implements OnInit {
-  public users: User[] | null = null;
+  public users: Promise<User[]> | null = null;
 
   constructor(
     private userListService: UserListService,

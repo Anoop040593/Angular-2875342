@@ -1,23 +1,19 @@
 import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
 
-describe('workspace-project App', () => {
-  let page: AppPage;
+describe('User List App', () => {
+  const page = new AppPage();
 
-  beforeEach(() => {
-    page = new AppPage();
+  beforeEach(async () => {
+    await page.getDashboard();
   });
 
-  it('should display welcome message', async () => {
-    await page.navigateTo();
-    expect(await page.getTitleText()).toEqual('ng-testing-and-debugging app is running!');
+  it('should have a header', async () => {
+    const text = await page.getHeaderText();
+    expect(text).toBe('Active Users');
   });
 
-  afterEach(async () => {
-    // Assert that there are no errors emitted from the browser
-    const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(jasmine.objectContaining({
-      level: logging.Level.SEVERE,
-    } as logging.Entry));
+  it('should have 16 users on page load', async () => {
+    const users = page.getListItems();
+    expect(await users.count()).toBe(16);
   });
 });
