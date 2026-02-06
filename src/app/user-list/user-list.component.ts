@@ -11,13 +11,21 @@ import { WebStorageService } from '../services/web-storage.service';
 export class UserListComponent implements OnInit {
   public users: User[] | null = null;
 
-  constructor(private userListService: UserListService) {}
+  constructor(
+    private userListService: UserListService,
+    private webStorage: WebStorageService,
+  ) {}
 
   public async ngOnInit(): Promise<void> {
-    this.users = await this.userListService.getAll();
+    const filtered = this.webStorage.get('USERS');
+    this.users =
+      filtered === null
+        ? await this.userListService.getAll()
+        : JSON.parse(filtered);
   }
 
   public async update(text: string): Promise<void> {
     this.users = await this.userListService.filter(text);
+    this.webStorage.set('USERS', JSON.stringify(this.users));
   }
 }
